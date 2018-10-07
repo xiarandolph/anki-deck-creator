@@ -10,6 +10,7 @@ TODO:
 
 import sys
 from parser import Parser
+from deckcreator import DeckCreator
 
 def print_usage():
     # Print command line arguments
@@ -25,4 +26,5 @@ if __name__ == '__main__':
     except FileNotFoundError:
         print("Error: Could not open file", sys.argv[1])
         exit(1)
-        
+    
+    dc = DeckCreator("Chinese")
