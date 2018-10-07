@@ -1,3 +1,11 @@
+"""
+Module defines DeckCreator class
+
+TODO:
+    * Define DeckCreator class
+    * Create card pairings for every column in data
+"""
+
 import genanki
 import random   # generating UUID
 

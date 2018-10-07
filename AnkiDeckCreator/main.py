@@ -1,5 +1,11 @@
 """
 Main program file
+
+Example:
+    $ python3 main.py input.xlsx
+
+TODO:
+    * Parse data and create deck and .apkg file
 """
 
 import sys
