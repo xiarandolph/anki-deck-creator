@@ -18,8 +18,12 @@ def print_usage():
 
 def print_commands():
     print("\nAvailable commands:")
-    print("\tmake_notes <front column> <back column> <card model>")
-    print("\twrite_out <filename>")
+    print("\tcreate_deck <deck name> [deck id]")
+    # print("\tprint_decks")
+    # print("\tprint_models")
+    # print("\tprint_data")
+    print("\tmake_notes <deck name> <front column> <back column> <card model>")
+    print("\twrite_out <deck name> <filename>")
     print("\thelp")
     print("\tquit")
     print("\nAvailable models:")
@@ -40,55 +44,73 @@ if __name__ == '__main__':
     print("Data found:")
     for title in fp.get_titles():
         print("{:10s}:".format(title), len(fp.data[title]), "items")
+        
+    decks = {}
     
-    deck_name = input("\nEnter a deck name: ")
-    #id = input("\nEnter a deck id (zero for random): ")
-    deck = DeckCreator(deck_name)
+    models = {
+        'short_ans_model': short_ans_model,
+        'basic_model': basic_model
+    }
     
     print_commands()
     ui = ""
-    while (ui == "" or ui[0] != "quit"):
+    while ui == "" or ui[0] != "quit":
         ui = input("\nEnter a command: ").split()
-        if (ui[0] == "make_notes"):
-            if len(ui) != 4:
+        if ui[0] == "create_deck":
+            if len(ui) == 3:
+                decks[ui[1]] = DeckCreator(ui[1], ui[2])
+            elif len(ui) == 2:
+                decks[ui[1]] = DeckCreator(ui[1])
+            else:
+                print("Expected 2 or 3 arguments, got", len(ui))
+                continue
+                
+        elif ui[0] == "make_notes":
+            if len(ui) != 5:
                 print("Expected 4 arguments, got", len(ui))
                 continue
+                
             # Determine model
-            if (ui[3] == "short_ans_model"):
-                model = short_ans_model
-            elif (ui[3] == "basic_model"):
-                model = basic_model
-            else:
-                print("Unknown model", ui[3])
+            if ui[4] not in models.keys():
+                print("Unknown model", ui[4],".")
                 continue
             
-            if (ui[1] not in fp.get_titles()):
-                print("Unknown column", ui[1])
+            # Check if deck exists
+            if ui[1] not in decks.keys():
+                print("Unknown deck", ui[1])
                 continue
-            if (ui[2] not in fp.get_titles()):
+    
+            # Check if columns exist
+            if ui[2] not in fp.get_titles():
                 print("Unknown column", ui[2])
                 continue
+            if ui[3] not in fp.get_titles():
+                print("Unknown column", ui[3])
+                continue
             
-            if (len(fp.data[ui[1]]) != len(fp.data[ui[2]])):
+            front = fp.data[ui[2]]
+            back = fp.data[ui[3]]
+            
+            if len(front) != len(back):
                 print("Error: could not pair columns, mismatched lengths")
                 continue
             
-            for i in range(len(fp.data[ui[1]])):
-                deck.create_note((fp.data[ui[1]][i], fp.data[ui[2]][i]), model)
+            for i in range(len(front)):
+                decks[ui[1]].create_note((front[i], back[i]), models[ui[4]])
             
-            print("Created {:d} notes in deck .".format(len(fp.data[ui[1]]))
-                                                        , deck_name)
+            print("Created {:d} notes in deck {:s}.".format(len(front), ui[1]))
 
         elif (ui[0] == "write_out"):
-            if (len(ui) != 2):
-                print("Expected 2 arguments, received", len(ui))
+            if (len(ui) != 3):
+                print("Expected 3 arguments, received", len(ui))
                 continue
-            deck.write_to_file(ui[1])
+            decks[ui[1]].write_to_file(ui[2])
             print("Write out complete")
 
         elif (ui[0] == "help"):
             print_commands()
         elif (ui[0] == "quit"):
+            print("Program ending.")
             continue
         else:
             print("Error: unknown command", ui[0])

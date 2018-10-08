@@ -74,8 +74,7 @@ class DeckCreator:
         @param  data    two-tuple containing front and back fields (front, back)
         @param  model   basic_model or short_ans_model
         """
-        print(data)
-        print(model)
+
         note = genanki.Note(
             model=model,
             fields=[str(data[0]), str(data[1])]
