@@ -1,5 +1,8 @@
 """
 Module defines DeckCreator class and some basic models
+
+TODO:
+    * Add create_model command
 """
 
 import genanki
@@ -33,7 +36,7 @@ basic_model = genanki.Model(
 )
 
 short_ans_model = genanki.Model(
-    1835728501,     # MODEL ID
+    1835728501,
     'Short Answer Model',
     fields=[
         {'name': 'Front'},
@@ -54,7 +57,7 @@ class DeckCreator:
         self.decks = {}
         self.models = {
             'short_ans_model': short_ans_model,
-            'basic_model': basic_model
+            'basic_model': basic_model,
         }
 
     def parse_excel(self, params):
@@ -118,7 +121,7 @@ class DeckCreator:
         data = []
 
         if len(model.fields) != len(params)-2:
-            print("Error: {} fields found, expected {}".format(len(data),
+            print("Error: {} fields found, expected {}".format(len(params)-2,
                                                                len(model.fields)))
             return False
 

@@ -6,6 +6,8 @@ Example:
 
 TODO:
     * Make usage more intuitive and code more readable
+    * Allow reading from previous Anki files to update existing Notes
+    * Change from parsing text files to just excel file with commands built in
 """
 
 import sys
