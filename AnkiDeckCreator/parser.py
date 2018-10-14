@@ -10,15 +10,15 @@ class Parser:
         self.data = {}
 
         self.parse_file()
-    
+
     def parse_file(self):
         wb = load_workbook(filename=self.filename)
         cols = tuple(wb.active.columns)
         for col in cols:
-            title = col[0].value
+            title = str(col[0].value)
             self.data[title] = []
             for i in range(1, len(col)):
-                self.data[title].append(col[i].value)
-                
+                self.data[title].append(str(col[i].value))
+
     def get_titles(self):
         return self.data.keys()
