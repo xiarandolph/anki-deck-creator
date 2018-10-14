@@ -140,24 +140,28 @@ class DeckCreator:
     def write_out(self, params):
         """
         params[0]   string filename to write to
-        params[1:]   string key of genanki.Deck to write out
+        params[1:]  list of string key of genanki.Deck to write out
+        
+        Currently doesn't support multiple decks at once
         """
 
         if len(params) < 2:
             print("Error: expected at least 2 arguments, received", len(params))
             return False
 
-        if params[1] not in self.decks.keys():
-            print("Error: deck {} not found".format(params[0]))
-            return False
-
-        deck = self.decks[params[1]]
+        decks = []#self.decks[params[1]]
         filename = params[0]
+
+        for deck_name in params[1:]:
+            if deck_name not in self.decks.keys():
+                print("Error: deck {} not found".format(deck_name))
+                return False
+            decks.append(self.decks[deck_name])
 
         extension = filename.split('.')
         if (len(extension) != 2 or extension[1] != 'apkg'):
             print("Error: invalid filename, expected .apkg")
-        genanki.Package(deck).write_to_file(filename)
+        genanki.Package(decks).write_to_file(filename)
 
         return True
 
